@@ -1,4 +1,3 @@
-/// /gcc pwm.c -o pwm ///
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -16,15 +15,16 @@
 #include <sched.h>
 #include <errno.h>
 
-
-#define SW_PORTC_IO_BASE  0x01c20800 //dataregister 
-#define PWM_CH_CTRL  0x01c21400 //pwm control register
+#define SW_PORTC_IO_BASE 0x01c20800 // Base register for pin configuration
+#define PWM_CH_CTRL  0x01c21400 // PWM control register
 
 int main() {
+
 	unsigned int * pc;
 	int fd, i;
 	char * ptr;
 	unsigned int addr_start, addr_offset, PageSize, PageMask, data;
+
 
 	PageSize = sysconf(_SC_PAGESIZE);
 	PageMask = (~(PageSize-1));
