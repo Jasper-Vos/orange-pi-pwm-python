@@ -29,6 +29,7 @@ static PyObject *pwm_control(PyObject *self, PyObject *args){
     {
         return NULL;
     }
+    //TODO: Throw error.
     if(duty_cycle > 100) {
         return NULL;
     }
@@ -45,6 +46,7 @@ static PyObject *pwm_control(PyObject *self, PyObject *args){
     fd = open("/dev/mem", O_RDWR);
     if (fd < 0)
     {
+        // TODO: Throw error.
         perror("Unable to open /dev/mem");
         return NULL;
     }
@@ -53,6 +55,7 @@ static PyObject *pwm_control(PyObject *self, PyObject *args){
 
     if (pc == MAP_FAILED)
     {
+        // TODO: Throw error.
         perror("Unable to mmap file");
         printf("pc:%lx\n", (unsigned long)pc);
         return NULL;
@@ -74,13 +77,13 @@ static PyObject *pwm_control(PyObject *self, PyObject *args){
 
     if (pc == MAP_FAILED)
     {
+        // TODO: Throw error.
         perror("Unable to mmap file");
         printf("pc:%lx\n", (unsigned long)pc);
         return NULL;
     }
     ptr = (char *)pc + addr_offset;
     data = *(unsigned int *)(ptr + 0x00); // offset for controller register
-
     //       data |= (1<<0);                              //prescale = 360
     //      data |= (1<<1);                              //
 
@@ -118,5 +121,39 @@ static struct PyModuleDef pwmmodule = {
 
 PyMODINIT_FUNC PyInit_h3pwm(void)
 {
-    return PyModule_Create(&pwmmodule);
+    PyObject *module = PyModule_Create(&pwmmodule);
+    PyObject *v = PyLong_FromSize_t(0x0000);
+    PyObject_SetAttrString(module, "PRESCALAR_120", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x0001);
+    PyObject_SetAttrString(module, "PRESCALAR_180", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x0002);
+    PyObject_SetAttrString(module, "PRESCALAR_240", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x0003);
+    PyObject_SetAttrString(module, "PRESCALAR_360", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x0004);
+    PyObject_SetAttrString(module, "PRESCALAR_480", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x0008);
+    PyObject_SetAttrString(module, "PRESCALAR_12K", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x0009);
+    PyObject_SetAttrString(module, "PRESCALAR_24K", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x000A);
+    PyObject_SetAttrString(module, "PRESCALAR_36K", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x000B);
+    PyObject_SetAttrString(module, "PRESCALAR_48K", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x000C);
+    PyObject_SetAttrString(module, "PRESCALAR_72K", v);
+    Py_DECREF(v);
+    v = PyLong_FromSize_t(0x000F);
+    PyObject_SetAttrString(module, "PRESCALAR_1", v);
+    Py_DECREF(v);
+    return module;
 }
