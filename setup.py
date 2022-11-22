@@ -1,8 +1,8 @@
 from setuptools import setup, Extension
 
 def main():
-    setup(name="H3pwm",
-          version="0.1",
+    setup(name="h3pwm",
+          version="0.2",
           description="Python PWM interface for Allwinner H3 based computer",
           author="Jasper Vos",
           author_email="me@jaspervos.com",
